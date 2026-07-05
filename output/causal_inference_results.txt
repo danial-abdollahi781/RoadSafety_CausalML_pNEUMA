@@ -1,24 +1,24 @@
---- Causal ML Module: Propensity Score Matching Results ---
+--- Optimized Causal ML Module: Caliper-enforced PSM Results ---
 
-1. Matching Summary:
+1. Matching Summary (Notice dropped unmatched units for strict balance):
               Control Treated
 All (ESS)        5288    4858
 All              5288    4858
-Matched (ESS)    4858    4858
-Matched          4858    4858
-Unmatched         430       0
+Matched (ESS)    4446    4446
+Matched          4446    4446
+Unmatched         842     412
 Discarded           0       0
 
-2. Causal Effect on TTC (T-Test):
+2. Causal Effect on TTC after Strict Matching (T-Test):
 
 	Welch Two Sample t-test
 
 data:  min_ttc_sec by is_motorcycle
-t = 7.7784, df = 9714, p-value = 8.093e-15
+t = 0.32661, df = 8889.6, p-value = 0.744
 alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
 95 percent confidence interval:
- 0.08795037 0.14721332
+ -0.02571350  0.03599542
 sample estimates:
 mean in group 0 mean in group 1 
-       1.356057        1.238475 
+       1.303375        1.298234 
 
