@@ -58,14 +58,14 @@ A major technical achievement in this project was implementing a strict **25-fra
 | **Phase 4** | Publication Visualizations | ✅ Completed |
 ---
 
-## 📥 Direct Download Links (Final Manuscripts)
+## 📥 Project Manuscripts
 
-As per the project requirements, the final manuscripts are available in three formats. Click the links below for direct downloads:
+As per the project requirements, the final manuscripts are available in three formats. Click the links below to view or download:
 
-| Format | Language | Description | Direct Link |
+| Format | Language | Description | Link |
 | :--- | :---: | :--- | :---: |
-| 📄 **Word (.docx)** | 🇮🇷 Persian | Full manuscript ready for submission/review | [📥 Download Here](docs/Manuscript_Fa.docx?raw=true) |
-| 📕 **PDF (.pdf)** | 🇬🇧 English | Publication-ready English manuscript | [📥 Download Here](docs/Manuscript_En.pdf?raw=true) |
-| 🌐 **HTML (.html)** | 🇬🇧 English | Web-viewable interactive format | [📥 Download Here](docs/Manuscript_En.html?raw=true) |
+| 📄 **Word (.docx)** | 🇮🇷 Persian | Full manuscript ready for submission/review | [📥 View / Download](docs/Manuscript_Fa.docx) |
+| 📕 **PDF (.pdf)** | 🇬🇧 English | Publication-ready English manuscript | [📥 View / Download](docs/Manuscript_En.pdf) |
+| 🌐 **HTML (.html)** | 🇬🇧 English | Web-viewable interactive format | [📥 View / Download](docs/Manuscript_En.html) |
 
 ---
