@@ -56,3 +56,16 @@ A major technical achievement in this project was implementing a strict **25-fra
 | **Phase 2** | Euclidean Kinematics & 25-Frame RLE | ✅ Completed |
 | **Phase 3** | Causal Forest & Mahalanobis PSM | ✅ Completed |
 | **Phase 4** | Publication Visualizations | ✅ Completed |
+---
+
+## 📥 Direct Download Links (Final Manuscripts)
+
+As per the project requirements, the final manuscripts are available in three formats. Click the links below for direct downloads:
+
+| Format | Language | Description | Direct Link |
+| :--- | :---: | :--- | :---: |
+| 📄 **Word (.docx)** | 🇮🇷 Persian | Full manuscript ready for submission/review | [📥 Download Here](docs/Manuscript_Fa.docx?raw=true) |
+| 📕 **PDF (.pdf)** | 🇬🇧 English | Publication-ready English manuscript | [📥 Download Here](docs/Manuscript_En.pdf?raw=true) |
+| 🌐 **HTML (.html)** | 🇬🇧 English | Web-viewable interactive format | [📥 Download Here](docs/Manuscript_En.html?raw=true) |
+
+---
