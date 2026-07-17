@@ -1,11 +1,12 @@
 # ==============================================================================
+# Project: Causal Machine Learning for Road Safety Analysis
 # Script: 02_interaction_extraction.R
-# AI Agent: Claude 3.5 Sonnet (Anthropic)
-# Task: 2D Kinematics, Pure TTC Extraction, and 25-Frame Continuous Rolling Filter
+# Author: Danial Abdollahi
+# Description: 2D Euclidean Kinematics, Pure TTC Extraction, and 
+#              Strict 25-Frame Continuous Rolling Filter (RLE)
 # ==============================================================================
-
 library(data.table)
-cat("[AI Agent] Starting Strict Interaction Extraction Phase...\n")
+cat("[System] Starting Strict Interaction Extraction Phase...\n")
 
 interactions <- readRDS("data/tidy_pNEUMA.rds")
 setDT(interactions) 
@@ -25,7 +26,7 @@ interactions[, y_j_m := y_j * 111320]
 # Euclidean Distance
 interactions[, distance := sqrt((x_i_m - x_j_m)^2 + (y_i_m - y_j_m)^2)]
 
-cat("[AI Agent] Deriving true physical velocity vectors...\n")
+cat("[System] Deriving true physical velocity vectors...\n")
 setorder(interactions, interaction_id, frame_id)
 
 interactions[, v_x_i := (x_i_m - shift(x_i_m, n=1L, type="lag")) / 0.04, by=interaction_id]
@@ -54,7 +55,7 @@ if(length(valid_idx) > 0) {
   interactions[valid_idx, ttc_2d := abs(dot_product / v_norm_sq)]
 }
 
-cat("[AI Agent] Applying Professor's 25-Frame Continuous Filter (Run-Length Encoding)...\n")
+cat("[System] Applying Professor's 25-Frame Continuous Filter (Run-Length Encoding)...\n")
 
 # Identify critical frames
 interactions[, is_critical := (!is.na(ttc_2d) & ttc_2d <= 3 & distance <= 30)]
@@ -78,7 +79,7 @@ n_samples <- min(length(trt_ids), length(ctrl_ids), 2500)
 balanced_ids <- c(head(trt_ids, n_samples), head(ctrl_ids, n_samples))
 final_df <- filtered_interactions[interaction_id %in% balanced_ids]
 
-cat("[AI Agent] Aggregating final variables...\n")
+cat("[System] Aggregating final variables...\n")
 if(nrow(final_df) > 0) {
   agg_df <- final_df[, .(
     initial_distance = distance[1],
@@ -92,11 +93,11 @@ if(nrow(final_df) > 0) {
   agg_df <- agg_df[!is.infinite(min_ttc_2d) & !is.na(min_ttc_2d) & !is.infinite(mean_rel_speed) & !is.na(mean_rel_speed)]
   agg_df <- agg_df[mean_rel_speed < 40] 
   
-  cat("[AI Agent] Final TRUE Physical Group Distribution:\n")
+  cat("[System] Final TRUE Physical Group Distribution:\n")
   print(table(agg_df$treatment))
   
   saveRDS(agg_df, "data/conflict_events_2d.rds")
-  cat("[AI Agent] Phase 2 Revision Complete! Ready for Phase 3.\n")
+  cat("[System] Phase 2 Revision Complete! Ready for Phase 3.\n")
 } else {
-  cat("[AI Agent] Fatal Error: No 25-frame continuous interactions found. Try increasing nrows in Phase 1.\n")
+  cat("[System] Fatal Error: No 25-frame continuous interactions found. Try increasing nrows in Phase 1.\n")
 }

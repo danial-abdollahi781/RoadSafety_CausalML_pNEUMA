@@ -1,13 +1,14 @@
 # ==============================================================================
+# Project: Causal Machine Learning for Road Safety Analysis
 # Script: 04_results_visualization.R
-# AI Agent: Claude 3.5 Sonnet (Anthropic)
-# Task: Publication-Quality Figures and Tables for the Final Paper
+# Author: Danial Abdollahi
+# Description: Publication-Quality Figures and Descriptive Statistics Tables
 # ==============================================================================
 
 library(data.table)
 library(ggplot2)
 
-cat("[AI Agent] Initializing Phase 4: Publication Visualization...\n")
+cat("[System] Initializing Phase 4: Publication Visualization...\n")
 
 agg_df <- readRDS("data/conflict_events_2d.rds")
 setDT(agg_df)
@@ -18,7 +19,7 @@ agg_df[, interaction_type := factor(treatment,
 
 if(!dir.exists("output")) dir.create("output")
 
-cat("[AI Agent] Generating Table 1: Descriptive Statistics...\n")
+cat("[System] Generating Table 1: Descriptive Statistics...\n")
 summary_stats <- agg_df[, .(
   Total_Interactions = .N,
   Mean_TTC_Seconds = round(mean(min_ttc_2d, na.rm=TRUE), 2),
@@ -31,7 +32,7 @@ summary_stats <- agg_df[, .(
 write.csv(summary_stats, "output/Table1_Descriptive_Statistics.csv", row.names = FALSE)
 print(summary_stats)
 
-cat("[AI Agent] Generating Figure 1: TTC Boxplot...\n")
+cat("[System] Generating Figure 1: TTC Boxplot...\n")
 p1 <- ggplot(agg_df, aes(x = interaction_type, y = min_ttc_2d, fill = interaction_type)) +
   geom_boxplot(alpha = 0.8, outlier.shape = 21, outlier.fill = "white", outlier.alpha = 0.5) +
   scale_fill_manual(values = c("#34495e", "#e74c3c")) + 
@@ -46,7 +47,7 @@ p1 <- ggplot(agg_df, aes(x = interaction_type, y = min_ttc_2d, fill = interactio
 
 suppressWarnings(ggsave("output/Fig1_TTC_Boxplot.png", plot = p1, width = 8, height = 6, dpi = 300))
 
-cat("[AI Agent] Generating Figure 2: Speed vs. Safety Margin Scatter/Trend...\n")
+cat("[System] Generating Figure 2: Speed vs. Safety Margin Scatter/Trend...\n")
 p2 <- ggplot(agg_df, aes(x = mean_rel_speed, y = min_ttc_2d, color = interaction_type)) +
   geom_point(alpha = 0.2, size = 1.5) +
   geom_smooth(method = "loess", se = TRUE, linewidth = 1.2) +
@@ -62,4 +63,4 @@ p2 <- ggplot(agg_df, aes(x = mean_rel_speed, y = min_ttc_2d, color = interaction
 
 suppressWarnings(ggsave("output/Fig2_Speed_vs_TTC.png", plot = p2, width = 9, height = 6, dpi = 300))
 
-cat("[AI Agent] Phase 4 Completed! All publication assets saved in the 'output' folder.\n")
+cat("[System] Phase 4 Completed! All publication assets saved in the 'output' folder.\n")

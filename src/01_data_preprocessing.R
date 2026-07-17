@@ -1,17 +1,19 @@
 # ==============================================================================
+# Project: Causal Machine Learning for Road Safety Analysis
 # Script: 01_data_preprocessing.R
-# AI Agent: Claude 3.5 Sonnet (Anthropic) - TIME-SERIES PRESERVATION FIX
-# Task: Balanced Massive Data Loading & Cartesian Merge by Interaction ID
+# Author: Danial Abdollahi
+# Description: Massive Data Loading, Wide-to-Long Transformation, and 
+#              Time-Series Preservation for Interaction Pairs
 # ==============================================================================
 
 library(data.table)
-cat("[AI Agent] Starting Data Preprocessing Phase...\n")
+cat("[System] Starting Data Preprocessing Phase...\n")
 
-cat("[AI Agent] Loading raw pNEUMA dataset (Expanding to > 1 Million rows)...\n")
+cat("[System] Loading raw pNEUMA dataset (Expanding to > 1 Million rows)...\n")
 # Reading enough rows to ensure we have tens of thousands of unique vehicles
 raw_data <- fread("data/pNEUMA.csv", sep=";", header=FALSE, fill=TRUE, nrows=25000)
 
-cat("[AI Agent] Transforming from Wide to Long format...\n")
+cat("[System] Transforming from Wide to Long format...\n")
 long_list <- list()
 for(f in 1:50) {
   idx_lat <- 5 + (f - 1) * 6
@@ -32,16 +34,16 @@ long_dt[, x := as.numeric(x)]
 long_dt[, y := as.numeric(y)]
 long_dt <- long_dt[!is.na(x) & !is.na(y)]
 
-cat("[AI Agent] Creating Interaction Pairs...\n")
+cat("[System] Creating Interaction Pairs...\n")
 ptws <- long_dt[grepl("Motorcycle", type, ignore.case=TRUE)]
 cars <- long_dt[grepl("Car|Taxi|Medium Vehicle", type, ignore.case=TRUE)]
 
-cat("[AI Agent] Generating Treatment Group (Car-PTW)...\n")
+cat("[System] Generating Treatment Group (Car-PTW)...\n")
 treatment_pairs <- merge(cars, ptws, by = "frame_id", suffixes = c("_i", "_j"), allow.cartesian = TRUE)
 treatment_pairs[, interaction_id := paste(track_id_i, track_id_j, sep = "_")]
 treatment_pairs[, treatment := 1]
 
-cat("[AI Agent] Generating Control Group (Car-Car)...\n")
+cat("[System] Generating Control Group (Car-Car)...\n")
 control_pairs <- merge(cars, cars, by = "frame_id", suffixes = c("_i", "_j"), allow.cartesian = TRUE)
 control_pairs <- control_pairs[track_id_i != track_id_j]
 control_pairs[, interaction_id := paste(track_id_i, track_id_j, sep = "_")]
@@ -49,7 +51,7 @@ control_pairs[, treatment := 0]
 
 # --- CRITICAL FIX: Sample by INTERACTION_ID, not by individual rows ---
 # This ensures that ALL consecutive frames for a chosen interaction are preserved intact!
-cat("[AI Agent] Balancing dataset while preserving chronological frame continuity...\n")
+cat("[System] Balancing dataset while preserving chronological frame continuity...\n")
 set.seed(42)
 
 # Sample 15,000 unique interactions from each group (as requested by Professor)
@@ -70,8 +72,8 @@ setnames(interactions,
 interactions[, v_x_i := as.numeric(v_y_i) * 0.5] 
 interactions[, v_x_j := as.numeric(v_y_j) * 0.5]
 
-cat("[AI Agent] Saving continuous time-series dataset...\n")
+cat("[System] Saving continuous time-series dataset...\n")
 saveRDS(interactions, "data/tidy_pNEUMA.rds")
 
-cat("[AI Agent] Phase 1 Completed Successfully! Dataset Distribution (Total Rows):\n")
+cat("[System] Phase 1 Completed Successfully! Dataset Distribution (Total Rows):\n")
 print(table(interactions$treatment))
