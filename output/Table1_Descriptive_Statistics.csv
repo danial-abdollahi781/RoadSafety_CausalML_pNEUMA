@@ -1,0 +1,3 @@
+"interaction_type","Total_Interactions","Mean_TTC_Seconds","SD_TTC","Mean_Relative_Speed","SD_Relative_Speed","Mean_Distance_Meters"
+"Motorcycle-Car (Treatment)",2500,0.76,0.74,1.52,1.18,5.47
+"Car-Car (Baseline)",2500,3.23,3.46,1.16,0.95,9.11
