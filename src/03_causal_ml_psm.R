@@ -1,6 +1,6 @@
 # ==============================================================================
 # Script: 03_causal_ml_psm.R
-# AI Agent: Claude 3.5 Sonnet (Anthropic)
+# AI Agent: Claude 3.5 Sonnet (Anthropic) - REVIEWER FIX (One-Sided Test Swap)
 # Task: Causal Forest, CATE Analysis, and Rosenbaum Bounds Sensitivity Analysis
 # ==============================================================================
 
@@ -66,7 +66,9 @@ if(length(unique(agg_df$treatment)) > 1) {
     trt_outcomes <- agg_df$min_ttc_2d[m_out$index.treated]
     ctrl_outcomes <- agg_df$min_ttc_2d[m_out$index.control]
     
-    sens_results <- psens(x = trt_outcomes, y = ctrl_outcomes, Gamma = 3, GammaInc = 0.2)
+    # CRITICAL FIX: Swapping x and y because our treatment effect is NEGATIVE (reduces TTC).
+    # psens defaults to a one-sided test for positive effects. 
+    sens_results <- psens(x = ctrl_outcomes, y = trt_outcomes, Gamma = 3, GammaInc = 0.2)
     print(sens_results)
     
     cat("\n[AI Agent] Phase 3 Completed Successfully! All causal algorithms executed.\n")
